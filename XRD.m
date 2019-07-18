@@ -18,12 +18,17 @@ record = zeros(n);
 
 figure(2);
 for i = 1:n
+
     x = input('Input which point to plot\n');
     record(i) = x;
-    plt = plot(number(2:row_num,1),number(2:row_num,x + 1));
+    x_vec = zeros(3341,1);
+    x_vec(1:3341) = x;
+    plt = plot3(x_vec,number(2:3342,1),number(2:3342,x + 1));
     hold on;
+
 end
 
+axis([0, 105, -inf, inf]);
 lgd = num2str(record(1:n)','point %d');
 legend(lgd)
 

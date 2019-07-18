@@ -57,7 +57,7 @@ while (row_index < 225) && (col_index < 77)
            
            col_tmp = col_index;
            while col_tmp < col_end
-               
+                
                 % Sum up all the value in given range
                 data_bala(cnt) = data_bala(cnt) + number_bala(row_tmp,col_tmp);
                 data_hfla(cnt) = data_hfla(cnt) + number_hfla(row_tmp,col_tmp);
@@ -110,129 +110,120 @@ while (row_index < 225) && (col_index < 77)
     
 end
 
-%% Plot XRF
-index = zeros(1,100);
+%% Input target element and set threshold
+target = 0;
+target_data = zeros(1,100);
+target_element = lower(input('Input target element\n','s'));
+
+if target_element == 'ba'
+   target = 1;
+   target_data = data_bala;
+   target_element = 'BaLa';
+elseif target_element == 'hf'
+   target = 2;
+   target_data = data_hfla;
+   target_element = 'HfLa';
+elseif target_element == 'mo'
+   target = 3;
+   target_data = data_moka;
+   target_element = 'MoKa';
+elseif target_element == 'ta'
+   target = 4;
+   target_data = data_tala;
+   target_element = 'TaLa';
+elseif target_element == 'ti'
+   target = 5;
+   target_data = data_tika;
+   target_element = 'TiKa';
+elseif target_element == 'zr'
+   target = 6;
+   target_data = data_zrka;
+   target_element = 'ZrKa';
+end
+
+% Initialize threshold
+ba_min = 0;
+ba_max = 100;
+hf_min = 0;
+hf_max = 100;
+mo_min = 0;
+mo_max = 100;
+ta_min = 0;
+ta_max = 100;
+ti_min = 0;
+ti_max = 100;
+zr_min = 0;
+zr_max = 100;
+
+if target == 0
+    fprintf('No such element in database\n');
+else
+    
+    if target ~= 1
+        ba_min = input('Input the lower bound of Ba\n');
+        ba_max = input('Input the upper bound of Ba\n');
+    end
+    
+    if target ~= 2
+        hf_min = input('Input the lower bound of Hf\n');
+        hf_max = input('Input the upper bound of Hf\n');
+    end
+    
+    if target ~= 3
+        mo_min = input('Input the lower bound of Mo\n');
+        mo_max = input('Input the upper bound of Mo\n');
+    end
+    
+    if target ~= 4
+        ta_min = input('Input the lower bound of Ta\n');
+        ta_max = input('Input the upper bound of Ta\n');
+    end
+    
+    if target ~= 5
+        Ti_min = input('Input the lower bound of Ti\n');
+        Ti_max = input('Input the upper bound of Ti\n');
+    end
+    
+    if target ~= 6
+        Zr_min = input('Input the lower bound of Zr\n');
+        Zr_max = input('Input the upper bound of Zr\n');
+    end
+    
+end
+
+% In-bound checking 
+zz = number_xrd(2:3342,2:101);
 for i = 1:100
-   index(i) = i; 
+    
+   if (data_bala(i) < ba_min) || (data_bala(i) > ba_max)
+       zz(1:3341,i) = 0;
+   elseif (data_hfla(i) < hf_min) || (data_hfla(i) > hf_max)
+       zz(1:3341,i) = 0;
+   elseif (data_moka(i) < mo_min) || (data_moka(i) > mo_max)
+       zz(1:3341,i) = 0;
+   elseif (data_tala(i) < ta_min) || (data_tala(i) > ta_max)
+       zz(1:3341,i) = 0;
+   elseif (data_tika(i) < ti_min) || (data_tika(i) > ti_max)
+       zz(1:3341,i) = 0;
+   elseif (data_zrka(i) < zr_min) || (data_zrka(i) > zr_max)
+       zz(1:3341,i) = 0;
+   end
+   
 end
 
 figure(1)
-subplot(2,3,1)
-plot(index,data_bala);
-xlabel('points number') 
-ylabel('PR-15 BaLa') 
+for i = 1:100
 
-subplot(2,3,2)
-plot(index,data_hfla);
-xlabel('points number') 
-ylabel('PR-15 HfLa') 
-
-subplot(2,3,3)
-plot(index,data_moka);
-xlabel('points number') 
-ylabel('PR-15 MoKa') 
-
-subplot(2,3,4)
-plot(index,data_tala);
-xlabel('points number') 
-ylabel('PR-15 TaLa') 
-
-subplot(2,3,5)
-plot(index,data_tika);
-xlabel('points number') 
-ylabel('PR-15 TiKa') 
-
-subplot(2,3,6)
-plot(index,data_zrka);
-xlabel('points number') 
-ylabel('PR-15 ZrKa') 
-
-
-%% Plot XRD with XRF
-figure(2)
-zz = number_xrd(2:3342,2:101);
-
-subplot(2,3,1)
-[xx,yy] = meshgrid(number_xrd(2:3342,1)', data_bala(1,1:100));
-plot3(xx', yy', zz)
-xlabel('2-theta(degree)') 
-ylabel('PR-15 BaLa')
-
-subplot(2,3,2)
-[xx,yy] = meshgrid(number_xrd(2:3342,1)', data_hfla(1,1:100));
-plot3(xx', yy', zz)
-xlabel('2-theta(degree)') 
-ylabel('PR-15 HfLa')
-
-subplot(2,3,3)
-[xx,yy] = meshgrid(number_xrd(2:3342,1)', data_moka(1,1:100));
-plot3(xx', yy', zz)
-xlabel('2-theta(degree)') 
-ylabel('PR-15 MoKa')
-
-subplot(2,3,4)
-[xx,yy] = meshgrid(number_xrd(2:3342,1)', data_tala(1,1:100));
-plot3(xx', yy', zz)
-xlabel('2-theta(degree)') 
-ylabel('PR-15 TaLa')
-
-subplot(2,3,5)
-[xx,yy] = meshgrid(number_xrd(2:3342,1)', data_tika(1,1:100));
-plot3(xx', yy', zz)
-xlabel('2-theta(degree)') 
-ylabel('PR-15 TiKa')
-
-subplot(2,3,6)
-[xx,yy] = meshgrid(number_xrd(2:3342,1)', data_zrka(1,1:100));
-plot3(xx', yy', zz)
-xlabel('2-theta(degree)') 
-ylabel('PR-15 ZrKa')
-
-
-%% Plot XRD and XRF for a given point
-x = input('Input which point to plot\n');
-
-figure(3);
-subplot(1,2,1)
-plot(number_xrd(2:3342,1),number_xrd(2:3342,x + 1));
-xlabel('2-theta(degree)')
-ylabel('Intensity(arb.units)')
-
-subplot(1,2,2)
-bar_data = [data_bala(x);data_hfla(x);data_moka(x);data_tala(x);data_tika(x);data_zrka(x)];
-bar(bar_data)
-xlabel('Element')
-ylabel('Density')
-set(gca, 'xticklabel', {'BaLa','HfLa','MoKa', 'TaLa', 'TiKa', 'ZrKa'});
-
-
-%% Plot XRD and XRF for multipe points
-n = input('Input how many point to plot\n');
-record = zeros(n);
-bar_data = zeros(n,6);
-
-figure(4);
-subplot(1,2,1)
-for i = 1:n
-
-    x = input('Input which point to plot\n');
-    record(i) = x;
-    x_vec = zeros(3341,1);
-    x_vec(1:3341) = x;
-    plt = plot3(x_vec,number_xrd(2:3342,1),number_xrd(2:3342,x + 1));
-    hold on;
-    
-    bar_data(i,:) = [data_bala(x),data_hfla(x),data_moka(x),data_tala(x),data_tika(x),data_zrka(x)];
+    if zz(1:3341,i) ~= 0
+        y_vec = zeros(3341,1);
+        y_vec(1:3341) = target_data(i);
+        plt = plot3(number_xrd(2:3342,1),y_vec,zz(1:3341,i));
+        hold on;
+    end
 
 end
 
-axis([0, 105, -inf, inf]);
-lgd = num2str(record(1:n)','point %d');
-legend(lgd)
-
 hold off;
+xlabel('2-theta(degree)') 
+ylabel(['PR-15 ' target_element])
 
-subplot(1,2,2)
-bar3(bar_data,0.5)
-set(gca, 'xticklabel', {'BaLa','HfLa','MoKa', 'TaLa', 'TiKa', 'ZrKa'});
-set(gca, 'yticklabel', record(1:n)');
