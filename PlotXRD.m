@@ -1,18 +1,33 @@
 function PlotXRD(index,len)
 
-    global number_xrd
+    global number_xrd;
     global row_num;
+    global pos_num;
     
-    figure(3);
+    figure(1);
+    lgd_index = zeros(1,len);
     for i = 1:len
+        
         x_vec = zeros(row_num - 1,1);
-        x_vec(1:row_num - 1) = index(i);
-        plt = plot3(x_vec,number_xrd(2:row_num,1),number_xrd(2:row_num,index(i) + 1));
+        
+        if mod(index(i),11) == 0
+            row_index = floor(index(i)/11);
+            col_index = 11;
+        else
+            row_index = floor(index(i)/11) + 1;
+            col_index = mod(index(i),11);
+        end
+        
+        x_vec(1:row_num - 1) = pos_num(row_index,col_index);
+        lgd_index(i) = pos_num(row_index,col_index);
+        
+        plot3(x_vec,number_xrd(2:row_num,1),number_xrd(2:row_num,pos_num(row_index,col_index) + 1));
         hold on;
+        
     end
     
     axis([0, 105, -inf, inf]);
-    lgd = num2str(index(1:len)','point %d');
+    lgd = num2str(sort(lgd_index(1:len))','point %d');
     legend(lgd)
     xlabel('point number') 
     ylabel('2-theta(degree)')

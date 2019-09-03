@@ -59,35 +59,18 @@ if target == 0
     fprintf('No such element in database\n');
 else
     
-    if target ~= 1
         ba_min = str2double(get(handles.ba_min,'String'));
         ba_max = str2double(get(handles.ba_max,'String'));
-    end
-    
-    if target ~= 2
         hf_min = str2double(get(handles.hf_min,'String'));
         hf_max = str2double(get(handles.hf_max,'String'));
-    end
-    
-    if target ~= 3
         mo_min = str2double(get(handles.mo_min,'String'));
         mo_max = str2double(get(handles.mo_max,'String'));
-    end
-    
-    if target ~= 4
         ta_min = str2double(get(handles.ta_min,'String'));
         ta_max = str2double(get(handles.ta_max,'String'));
-    end
-    
-    if target ~= 5
-        Ti_min = str2double(get(handles.ti_min,'String'));
-        Ti_max = str2double(get(handles.ti_max,'String'));
-    end
-    
-    if target ~= 6
-        Zr_min = str2double(get(handles.zr_min,'String'));
-        Zr_max = str2double(get(handles.zr_max,'String'));
-    end
+        ti_min = str2double(get(handles.ti_min,'String'));
+        ti_max = str2double(get(handles.ti_max,'String'));
+        zr_min = str2double(get(handles.zr_min,'String'));
+        zr_max = str2double(get(handles.zr_max,'String'));
     
 end
 
@@ -119,7 +102,7 @@ for i = 1:100
     if zz(1:row_num - 1,i) ~= 0
         y_vec = zeros(row_num - 1,1);
         y_vec(1:row_num - 1) = target_data(i);
-        plt = plot3(number_xrd(2:row_num,1),y_vec,zz(1:row_num - 1,i));
+        plot3(number_xrd(2:row_num,1),y_vec,zz(1:row_num - 1,i));
         hold on;
     end
 
