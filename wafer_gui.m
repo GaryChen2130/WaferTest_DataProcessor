@@ -22,7 +22,7 @@ function varargout = wafer_gui(varargin)
 
 % Edit the above text to modify the response to help wafer_gui
 
-% Last Modified by GUIDE v2.5 26-Aug-2019 21:07:46
+% Last Modified by GUIDE v2.5 03-Sep-2019 21:01:52
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -706,7 +706,8 @@ global data_imp;
 global cbx;
 
 [sorted,index] = sort(data_imp,'descend');
-for i = 1:10
+points_num = str2double(get(handles.sort_num,'String'));
+for i = 1:points_num
    set(cbx(index(i)),'Value',1);
 end
 
@@ -1513,3 +1514,30 @@ function back_btn_Callback(hObject, eventdata, handles)
 set(handles.thresholdPanel,'Visible','off');
 ShowWaferPage(handles);
 end
+
+
+
+function sort_num_Callback(hObject, eventdata, handles)
+% hObject    handle to sort_num (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of sort_num as text
+%        str2double(get(hObject,'String')) returns contents of sort_num as a double
+
+end
+
+% --- Executes during object creation, after setting all properties.
+function sort_num_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to sort_num (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+end
+

@@ -123,11 +123,5 @@ function ReadXRF2
         col_cnt_p = 2;
     
     end
- 
- min(data_coka)
- min(data_mgka)
- min(data_mnka)
- min(data_nika)
- min(data_znka)
     
 end

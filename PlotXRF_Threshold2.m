@@ -110,7 +110,7 @@ figure(2)
 for i = 1:89
 
     %if zz(1:row_num - 1,i) ~= 0
-        zz(1:row_num - 1,i)
+        zz(1:row_num - 1,i);
         y_vec = zeros(row_num - 1,1);
         y_vec(1:row_num - 1) = target_data(i);
         plot3(number_xrd(2:row_num,1),y_vec,zz(1:row_num - 1,i));

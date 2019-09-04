@@ -3,10 +3,12 @@ function PlotRes(index,len)
     global data_imp;
     global pos_num;
     
-    bar_data = zeros(2,len);
+    bar_data = zeros(len,2);
+    plot_data = zeros(len,2);
     for i = 1:len
         
-        bar_data(1,i) = data_imp(index(i));
+        bar_data(i,1) = data_imp(index(i));
+        plot_data(i,1) = data_imp(index(i));
         
         if mod(index(i),11) == 0
             row_index = floor(index(i)/11);
@@ -16,23 +18,31 @@ function PlotRes(index,len)
             col_index = mod(index(i),11);
         end
         
-        bar_data(2,i) = pos_num(row_index,col_index);
+        bar_data(i,2) = pos_num(row_index,col_index);
+        plot_data(i,2) = pos_num(row_index,col_index);
         
     end
     
     figure(3)
-    bar(bar_data(2,:),bar_data(1,:));
+    plot_data = sortrows(plot_data,2);
+    plot(plot_data(:,2),plot_data(:,1),'-o');
     
-    for i = 1:len
-       text(bar_data(2,i),bar_data(1,i) + 1,num2str(bar_data(1,i),'%g'),...
-                'HorizontalAlignment','center',...
-                'VerticalAlignment','bottom'); 
-    end
-    
-    
-    set(gca, 'xticklabel', sort(bar_data(2,:)));
     xlabel('point number') 
     ylabel('Resistance')
-    ylim([0,(max(bar_data(1,:))*4)/3])
+    ylim([0,(max(plot_data(:,1))*4)/3])
+    
+    figure(4)
+    bar_data = sortrows(bar_data,2);
+    bar(bar_data(:,2),bar_data(:,1));
+    
+    %for i = 1:len
+    %   text(bar_data(2,i),bar_data(1,i) + 1,num2str(bar_data(1,i),'%g'),...
+    %            'HorizontalAlignment','center',...
+    %            'VerticalAlignment','bottom'); 
+    %end
+       
+    xlabel('point number') 
+    ylabel('Resistance')
+    ylim([0,(max(bar_data(:,1))*4)/3])
     
 end
