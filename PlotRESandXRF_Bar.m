@@ -1,7 +1,6 @@
-function PlotXRDandXRF_Bar2(index,len)
+function PlotRESandXRF_Bar(index,len)
 
-    global number_xrd
-    global row_num;
+    global data_imp;
     global pos_num;
     
     global data_coka;
@@ -10,13 +9,15 @@ function PlotXRDandXRF_Bar2(index,len)
     global data_nika;
     global data_znka;
 
-
+    plot_data = zeros(len,2);
     bar_data = zeros(len,5);
     lgd_index = zeros(1,len);
 
     figure(4);
     subplot(1,2,1)
     for i = 1:len
+        
+        plot_data(i,1) = data_imp(index(i));
         
         if mod(index(i),11) == 0
             row_index = floor(index(i)/11);
@@ -26,30 +27,24 @@ function PlotXRDandXRF_Bar2(index,len)
             col_index = mod(index(i),11);
         end
         
-        x = pos_num(row_index,col_index);
-        x_vec = zeros(row_num - 1,1);
-        x_vec(1:row_num - 1) = x;
+        plot_data(i,2) = pos_num(row_index,col_index);
         lgd_index(i) = pos_num(row_index,col_index);
-        
-        plot3(x_vec,number_xrd(2:row_num,1),number_xrd(2:row_num,x + 1));
-        hold on;
-    
         bar_data(i,:) = [data_coka(index(i)),data_mgka(index(i)),data_mnka(index(i)),data_nika(index(i)),data_znka(index(i))];
-
+        
     end
-
-    axis([0, 100, -inf, inf]);
-    lgd = num2str(sort(lgd_index(1:len))','point %d');
-    legend(lgd)
+    
+    plot_data = sortrows(plot_data,2);
+    plot(plot_data(:,2),plot_data(:,1),'-o');
+    
     xlabel('point number') 
-    ylabel('2-theta(degree)')
-
-    hold off;
+    ylabel('Resistance')
+    ylim([0,(max(plot_data(:,1))*4)/3])
 
     subplot(1,2,2)
     plt = bar3(bar_data,0.1);
     set(gca, 'xticklabel', {'CoKa','MgKa','MnKa', 'NiKa', 'ZnKa'});
     set(gca, 'yticklabel', sort(lgd_index(1:len))');
+    set(gcf,'unit','normalized','position',[0.2,0.2,0.64,0.5]);
     
     [row,col] = size(bar_data);
     if row > 1

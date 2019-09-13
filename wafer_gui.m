@@ -249,7 +249,14 @@ if xrd_value == 1
 end
 
 if res_value == 1
-   PlotRes(record,point_num); 
+   if xrf_value == 1
+       PlotRESandXRF_Bar(record,point_num);
+       HideWaferPage(handles);
+       set(handles.thresholdPanel,'Visible','on');
+       set(handles.thresholdPanel2,'Visible','on');
+   else
+       PlotRes(record,point_num);
+   end
 end
 
 end
@@ -702,13 +709,33 @@ function sort_res_btn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+global pos_num;
 global data_imp;
 global cbx;
 
 [sorted,index] = sort(data_imp,'descend');
 points_num = str2double(get(handles.sort_num,'String'));
-for i = 1:points_num
-   set(cbx(index(i)),'Value',1);
+
+index_cnt = 1;
+sorted_cnt = 0;
+
+while (sorted_cnt < points_num) && (index_cnt <= 121)
+    
+    if mod(index(index_cnt),11) == 0
+        row_index = floor(index(index_cnt)/11);
+        col_index = 11;
+    else
+        row_index = floor(index(index_cnt)/11) + 1;
+        col_index = mod(index(index_cnt),11);
+    end
+    
+    % Check if the corresponding checkbox out of bound
+    if pos_num(row_index,col_index) > 0
+        set(cbx(index(index_cnt)),'Value',1);
+        sorted_cnt = sorted_cnt + 1;
+    end
+    index_cnt = index_cnt + 1;
+    
 end
 
 set(handles.res_checkbox,'Value',1);
@@ -722,6 +749,37 @@ function sort_zn_btn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+global pos_num;
+global data_znka;
+global cbx;
+
+[sorted,index] = sort(data_znka,'descend');
+points_num = str2double(get(handles.sort_num,'String'));
+
+index_cnt = 1;
+sorted_cnt = 0;
+
+while (sorted_cnt < points_num) && (index_cnt <= 121)
+    
+    if mod(index(index_cnt),11) == 0
+        row_index = floor(index(index_cnt)/11);
+        col_index = 11;
+    else
+        row_index = floor(index(index_cnt)/11) + 1;
+        col_index = mod(index(index_cnt),11);
+    end
+    
+    % Check if the corresponding checkbox out of bound
+    if pos_num(row_index,col_index) > 0
+        set(cbx(index(index_cnt)),'Value',1);
+        sorted_cnt = sorted_cnt + 1;
+    end
+    index_cnt = index_cnt + 1;
+    
+end
+
+set(handles.sortPanel,'Visible','off');
+
 end
 
 % --- Executes on button press in sort_mn_btn.
@@ -729,6 +787,37 @@ function sort_mn_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to sort_mn_btn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+global pos_num;
+global data_mnka;
+global cbx;
+
+[sorted,index] = sort(data_mnka,'descend');
+points_num = str2double(get(handles.sort_num,'String'));
+
+index_cnt = 1;
+sorted_cnt = 0;
+
+while (sorted_cnt < points_num) && (index_cnt <= 121)
+    
+    if mod(index(index_cnt),11) == 0
+        row_index = floor(index(index_cnt)/11);
+        col_index = 11;
+    else
+        row_index = floor(index(index_cnt)/11) + 1;
+        col_index = mod(index(index_cnt),11);
+    end
+    
+    % Check if the corresponding checkbox out of bound
+    if pos_num(row_index,col_index) > 0
+        set(cbx(index(index_cnt)),'Value',1);
+        sorted_cnt = sorted_cnt + 1;
+    end
+    index_cnt = index_cnt + 1;
+    
+end
+
+set(handles.sortPanel,'Visible','off');
 
 end
 
@@ -738,6 +827,37 @@ function sort_ni_btn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+global pos_num;
+global data_nika;
+global cbx;
+
+[sorted,index] = sort(data_nika,'descend');
+points_num = str2double(get(handles.sort_num,'String'));
+
+index_cnt = 1;
+sorted_cnt = 0;
+
+while (sorted_cnt < points_num) && (index_cnt <= 121)
+    
+    if mod(index(index_cnt),11) == 0
+        row_index = floor(index(index_cnt)/11);
+        col_index = 11;
+    else
+        row_index = floor(index(index_cnt)/11) + 1;
+        col_index = mod(index(index_cnt),11);
+    end
+    
+    % Check if the corresponding checkbox out of bound
+    if pos_num(row_index,col_index) > 0
+        set(cbx(index(index_cnt)),'Value',1);
+        sorted_cnt = sorted_cnt + 1;
+    end
+    index_cnt = index_cnt + 1;
+    
+end
+
+set(handles.sortPanel,'Visible','off');
+
 end
 
 % --- Executes on button press in sort_mg_btn.
@@ -746,6 +866,37 @@ function sort_mg_btn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+global pos_num;
+global data_mgka;
+global cbx;
+
+[sorted,index] = sort(data_mgka,'descend');
+points_num = str2double(get(handles.sort_num,'String'));
+
+index_cnt = 1;
+sorted_cnt = 0;
+
+while (sorted_cnt < points_num) && (index_cnt <= 121)
+    
+    if mod(index(index_cnt),11) == 0
+        row_index = floor(index(index_cnt)/11);
+        col_index = 11;
+    else
+        row_index = floor(index(index_cnt)/11) + 1;
+        col_index = mod(index(index_cnt),11);
+    end
+    
+    % Check if the corresponding checkbox out of bound
+    if pos_num(row_index,col_index) > 0
+        set(cbx(index(index_cnt)),'Value',1);
+        sorted_cnt = sorted_cnt + 1;
+    end
+    index_cnt = index_cnt + 1;
+    
+end
+
+set(handles.sortPanel,'Visible','off');
+
 end
 
 % --- Executes on button press in sort_co_btn.
@@ -753,6 +904,37 @@ function sort_co_btn_Callback(hObject, eventdata, handles)
 % hObject    handle to sort_co_btn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+global pos_num;
+global data_coka;
+global cbx;
+
+[sorted,index] = sort(data_coka,'descend');
+points_num = str2double(get(handles.sort_num,'String'));
+
+index_cnt = 1;
+sorted_cnt = 0;
+
+while (sorted_cnt < points_num) && (index_cnt <= 121)
+    
+    if mod(index(index_cnt),11) == 0
+        row_index = floor(index(index_cnt)/11);
+        col_index = 11;
+    else
+        row_index = floor(index(index_cnt)/11) + 1;
+        col_index = mod(index(index_cnt),11);
+    end
+    
+    % Check if the corresponding checkbox out of bound
+    if pos_num(row_index,col_index) > 0
+        set(cbx(index(index_cnt)),'Value',1);
+        sorted_cnt = sorted_cnt + 1;
+    end
+    index_cnt = index_cnt + 1;
+    
+end
+
+set(handles.sortPanel,'Visible','off');
 
 end
 

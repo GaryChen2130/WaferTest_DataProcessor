@@ -1,6 +1,7 @@
 function PlotXRF_Threshold2(handles,target_element)
 
-global number_xrd
+global number_xrd;
+global data_imp;
 global row_num;
 global pos_num;
     
@@ -85,42 +86,78 @@ end
 index(length(record) + 1:121) = [];
 
 
-% In-bound checking 
-zz = number_xrd(2:row_num,2:90);
+if get(handles.xrd_checkbox, 'value') == 1
 
-for i = 1:89
+    zz = number_xrd(2:row_num,2:90);
+
+    % In-bound checking
+    for i = 1:89
     
-   if ~ismember(i,index)
-       zz(1:row_num - 1,i) = 0;
-   elseif (data_coka(i) < co_min) || (data_coka(i) > co_max)
-       zz(1:row_num - 1,i) = 0;
-   elseif (data_mgka(i) < mg_min) || (data_mgka(i) > mg_max)
-       zz(1:row_num - 1,i) = 0;
-   elseif (data_mnka(i) < mn_min) || (data_mnka(i) > mn_max)
-       zz(1:row_num - 1,i) = 0;
-   elseif (data_nika(i) < ni_min) || (data_nika(i) > ni_max)
-       zz(1:row_num - 1,i) = 0;
-   elseif (data_znka(i) < zn_min) || (data_znka(i) > zn_max)
-       zz(1:row_num - 1,i) = 0;
-   end
+        if ~ismember(i,index)
+            zz(1:row_num - 1,i) = 0;
+        elseif (data_coka(i) < co_min) || (data_coka(i) > co_max)
+            zz(1:row_num - 1,i) = 0;
+        elseif (data_mgka(i) < mg_min) || (data_mgka(i) > mg_max)
+            zz(1:row_num - 1,i) = 0;
+        elseif (data_mnka(i) < mn_min) || (data_mnka(i) > mn_max)
+            zz(1:row_num - 1,i) = 0;
+        elseif (data_nika(i) < ni_min) || (data_nika(i) > ni_max)
+            zz(1:row_num - 1,i) = 0;
+        elseif (data_znka(i) < zn_min) || (data_znka(i) > zn_max)
+            zz(1:row_num - 1,i) = 0;
+        end
    
+    end
+
+    figure(2)
+    for i = 1:89
+
+        if sum(zz(1:row_num - 1,i)) ~= 0
+            y_vec = zeros(row_num - 1,1);
+            y_vec(1:row_num - 1) = target_data(i);
+            plot3(number_xrd(2:row_num,1),y_vec,zz(1:row_num - 1,i));
+            hold on;
+        end
+
+    end
+
+    hold off;
+    xlabel('2-theta(degree)') 
+    ylabel(['PR-15 ' target_element])
+
 end
 
-figure(2)
-for i = 1:89
-
-    %if zz(1:row_num - 1,i) ~= 0
-        zz(1:row_num - 1,i);
-        y_vec = zeros(row_num - 1,1);
-        y_vec(1:row_num - 1) = target_data(i);
-        plot3(number_xrd(2:row_num,1),y_vec,zz(1:row_num - 1,i));
-        hold on;
-    %end
-
+if get(handles.res_checkbox, 'value') == 1
+    
+    yy = zeros(121,2);
+    yy(:,2) = data_imp;
+    
+    % In-bound checking
+    for i = 1:121
+        yy(i,1) = target_data(i);
+        if ~ismember(i,record)
+            yy(i,2) = 0;
+        elseif (data_coka(i) < co_min) || (data_coka(i) > co_max)
+            yy(i,2) = 0;
+        elseif (data_mgka(i) < mg_min) || (data_mgka(i) > mg_max)
+            yy(i,2) = 0;
+        elseif (data_mnka(i) < mn_min) || (data_mnka(i) > mn_max)
+            yy(i,2) = 0;
+        elseif (data_nika(i) < ni_min) || (data_nika(i) > ni_max)
+            yy(i,2) = 0;
+        elseif (data_znka(i) < zn_min) || (data_znka(i) > zn_max)
+            yy(i,2) = 0;
+        end
+    end
+    
+    figure(3)
+    yy = sortrows(yy,1);
+    plot(yy(:,1),yy(:,2))
+    xlabel(['PR-15 ' target_element])
+    ylabel('Resistance')
+    ylim([0,(max(yy(:,2))*4)/3])
+    hold off
+    
 end
-
-hold off;
-xlabel('2-theta(degree)') 
-ylabel(['PR-15 ' target_element])
 
 end
