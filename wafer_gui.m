@@ -22,7 +22,7 @@ function varargout = wafer_gui(varargin)
 
 % Edit the above text to modify the response to help wafer_gui
 
-% Last Modified by GUIDE v2.5 03-Sep-2019 21:01:52
+% Last Modified by GUIDE v2.5 19-Sep-2019 14:39:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -69,6 +69,7 @@ bg = imshow(pic);
 set(bg,'AlphaData',alpha)
 
 % Generate checkboxes
+global pos_num;
 global cbx;
 cbx = zeros(1,121);
 y_pos = 40;
@@ -76,10 +77,11 @@ for i = 1:11
     x_pos = 20;
     for j = 1:11
         cbx((i - 1)*11 + j) = uicontrol('Style','checkbox',...
-                                        'String','',...
+                                        'String',num2str(pos_num(i,j)),...
                                         'tag',['Checkbox',num2str((i - 1)*11 + j)],...
                                         'value',0,...
-                                        'Position',[x_pos,y_pos,15,15]);
+                                        'Position',[x_pos,y_pos,30,15]);
+        set(cbx((i - 1)*11 + j),'BackgroundColor','c')
         x_pos = x_pos + 45;
     end
     y_pos = y_pos + 40;
@@ -239,12 +241,12 @@ res_value = get(handles.res_checkbox, 'value');
 
 if xrd_value == 1
     if xrf_value == 1
-        PlotXRDandXRF_Bar2(record,point_num);
+        PlotXRDandXRF_Bar2(handles,record,point_num);
         HideWaferPage(handles);
         set(handles.thresholdPanel,'Visible','on');
         set(handles.thresholdPanel2,'Visible','on');
     else
-        PlotXRD(record,point_num);
+        PlotXRD(handles,record,point_num);
     end
 end
 
@@ -1723,3 +1725,55 @@ end
 
 end
 
+
+
+function angle_min_Callback(hObject, eventdata, handles)
+% hObject    handle to angle_min (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of angle_min as text
+%        str2double(get(hObject,'String')) returns contents of angle_min as a double
+
+end
+
+% --- Executes during object creation, after setting all properties.
+function angle_min_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to angle_min (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+end
+
+
+
+function angle_max_Callback(hObject, eventdata, handles)
+% hObject    handle to angle_max (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of angle_max as text
+%        str2double(get(hObject,'String')) returns contents of angle_max as a double
+
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function angle_max_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to angle_max (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+end

@@ -1,4 +1,4 @@
-function PlotXRDandXRF_Bar2(index,len)
+function PlotXRDandXRF_Bar2(handles,index,len)
 
     global number_xrd
     global row_num;
@@ -14,7 +14,7 @@ function PlotXRDandXRF_Bar2(index,len)
     bar_data = zeros(len,5);
     lgd_index = zeros(1,len);
 
-    figure(4);
+    figure(2);
     subplot(1,2,1)
     for i = 1:len
         
@@ -43,6 +43,9 @@ function PlotXRDandXRF_Bar2(index,len)
     legend(lgd)
     xlabel('point number') 
     ylabel('2-theta(degree)')
+    angle_min = str2double(get(handles.angle_min,'String'));
+    angle_max = str2double(get(handles.angle_max,'String'));
+    ylim([angle_min,angle_max])
 
     hold off;
 

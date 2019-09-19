@@ -1,4 +1,4 @@
-function PlotXRD(index,len)
+function PlotXRD(handles,index,len)
 
     global number_xrd;
     global row_num;
@@ -31,6 +31,9 @@ function PlotXRD(index,len)
     legend(lgd)
     xlabel('point number') 
     ylabel('2-theta(degree)')
+    angle_min = str2double(get(handles.angle_min,'String'));
+    angle_max = str2double(get(handles.angle_max,'String'));
+    ylim([angle_min,angle_max])
 
     hold off;
     

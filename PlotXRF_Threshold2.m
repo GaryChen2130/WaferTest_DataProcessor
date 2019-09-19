@@ -109,7 +109,7 @@ if get(handles.xrd_checkbox, 'value') == 1
    
     end
 
-    figure(2)
+    figure(3)
     for i = 1:89
 
         if sum(zz(1:row_num - 1,i)) ~= 0
@@ -124,6 +124,9 @@ if get(handles.xrd_checkbox, 'value') == 1
     hold off;
     xlabel('2-theta(degree)') 
     ylabel(['PR-15 ' target_element])
+    angle_min = str2double(get(handles.angle_min,'String'));
+    angle_max = str2double(get(handles.angle_max,'String'));
+    xlim([angle_min,angle_max])
 
 end
 
@@ -133,7 +136,10 @@ if get(handles.res_checkbox, 'value') == 1
     yy(:,2) = data_imp;
     
     % In-bound checking
+    xmax = 0;
+    xmin = 100;
     for i = 1:121
+        
         yy(i,1) = target_data(i);
         if ~ismember(i,record)
             yy(i,2) = 0;
@@ -148,15 +154,34 @@ if get(handles.res_checkbox, 'value') == 1
         elseif (data_znka(i) < zn_min) || (data_znka(i) > zn_max)
             yy(i,2) = 0;
         end
+        
+        if yy(i,2) ~= 0
+            
+            if yy(i,1) > xmax
+                xmax = yy(i,1);
+            end
+            
+            if yy(i,1) < xmin
+                xmin = yy(i,1);
+            end
+            
+        end
+        
     end
     
-    figure(3)
+    figure(4)
     yy = sortrows(yy,1);
-    plot(yy(:,1),yy(:,2))
+    plot(yy(:,1),yy(:,2),'-o')
     xlabel(['PR-15 ' target_element])
     ylabel('Resistance')
     ylim([0,(max(yy(:,2))*4)/3])
-    hold off
+    
+    figure(5)
+    plot(yy(:,1),yy(:,2),'-o')
+    xlabel(['PR-15 ' target_element])
+    ylabel('Resistance')
+    xlim([xmin,xmax])
+    ylim([0,(max(yy(:,2))*4)/3])
     
 end
 
