@@ -1,23 +1,47 @@
 function ReadXRF2
 
        %% Read in file
-    CoKafile = '../data_Xuyen/rs11_XRF/RS-11_CoKa.xlsm';
-    MgKafile = '../data_Xuyen/rs11_XRF/RS-11_MgKa.xlsm';
-    MnKafile = '../data_Xuyen/rs11_XRF/RS-11_MnKa.xlsm';
-    NiKafile = '../data_Xuyen/rs11_XRF/RS-11_NiKa.xlsm';
-    ZnKafile = '../data_Xuyen/rs11_XRF/RS-11_ZnKa.xlsm';
-    
+       
     global number_coka;
     global number_mgka;
     global number_mnka;
     global number_nika;
     global number_znka;
     
+    % For rs7  
+    %CoKafile = '../data_Tina/xrf/RS-7_CoKa.xlsm';
+    %NiKafile = '../data_Tina/xrf/RS-7_NiKa.xlsm';
+    %ZnKafile = '../data_Tina/xtf/RS-7_ZnKa.xlsm';
+    
+    %[number_coka, text_coka, rawData_coka] = xlsread(CoKafile,'RS-7_CoKa','A1:BY225');
+    %[number_nika, text_nika, rawData_nika] = xlsread(NiKafile,'RS-7_NiKa','A1:BY225');
+    %[number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'RS-7_ZnKa','A1:BY225');
+    
+    % For rs11   
+    CoKafile = '../data_Xuyen/rs11_XRF/RS-11_CoKa.xlsm';
+    MgKafile = '../data_Xuyen/rs11_XRF/RS-11_MgKa.xlsm';
+    MnKafile = '../data_Xuyen/rs11_XRF/RS-11_MnKa.xlsm';
+    NiKafile = '../data_Xuyen/rs11_XRF/RS-11_NiKa.xlsm';
+    ZnKafile = '../data_Xuyen/rs11_XRF/RS-11_ZnKa.xlsm';
+    
     [number_coka, text_coka, rawData_coka] = xlsread(CoKafile,'RS-11_CoKa','A1:BY225');
     [number_mgka, text_mgka, rawData_mgka] = xlsread(MgKafile,'RS-11_MgKa','A1:BY225');
     [number_mnka, text_mnka, rawData_mnka] = xlsread(MnKafile,'RS-11_MnKa','A1:BY225');
     [number_nika, text_nika, rawData_nika] = xlsread(NiKafile,'RS-11_NiKa','A1:BY225');
     [number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'RS-11_ZnKa','A1:BY225');
+    
+    % For sp7
+    %CoKafile = '../data_Xuyen/sp7_XRF/SP-7_CoKa.xlsm';
+    %MgKafile = '../data_Xuyen/sp7_XRF/SP-7_CrKa.xlsm';
+    %MnKafile = '../data_Xuyen/sp7_XRF/SP-7_MnKa.xlsm';
+    %NiKafile = '../data_Xuyen/sp7_XRF/SP-7_NiKa.xlsm';
+    %ZnKafile = '../data_Xuyen/sp7_XRF/SP-7_FeKa.xlsm';
+    
+    %[number_coka, text_coka, rawData_coka] = xlsread(CoKafile,'SP-7_CoKa','A1:BY225');
+    %[number_mgka, text_mgka, rawData_mgka] = xlsread(MgKafile,'SP-7_CrKa','A1:BY225');
+    %[number_mnka, text_mnka, rawData_mnka] = xlsread(MnKafile,'SP-7_MnKa','A1:BY225');
+    %[number_nika, text_nika, rawData_nika] = xlsread(NiKafile,'SP-7_NiKa','A1:BY225');
+    %[number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'SP-7_FeKa','A1:BY225');
     
         %% Map XRF points to XRD points  (1mm, 1mm)/ (6.33mm, 6.33mm) 
     row_index = 152;

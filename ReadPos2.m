@@ -1,4 +1,4 @@
-function ReadPos(file_path,sheet_name,range,xstep,xmax,ystep,ymax)
+function ReadPos2(file_path,sheet_name,range,xstep,xmax,ystep,ymax)
 
 %% Read in file
     [number, text, rawData] = xlsread(file_path,sheet_name,range);
@@ -8,7 +8,7 @@ function ReadPos(file_path,sheet_name,range,xstep,xmax,ystep,ymax)
     
 %% Map points onto wafer
     global pos_num;
-    pos_num = zeros(10,10);
+    pos_num = zeros(11,11);
     
     for i = 1:length(point_number)
        col_index = round((x_pos(i) + xmax)/xstep) + 1;

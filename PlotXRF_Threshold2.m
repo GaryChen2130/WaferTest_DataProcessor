@@ -4,6 +4,7 @@ global number_xrd;
 global data_imp;
 global row_num;
 global pos_num;
+global mode;
     
 global data_coka;
 global data_mgka;
@@ -14,7 +15,13 @@ global data_znka;
 global record;
 
 target = 0;
-target_data = zeros(1,121);
+if mode == 1
+    col = 10;
+    target_data = zeros(1,100);
+elseif mode == 2
+    col = 11;
+    target_data = zeros(1,121);
+end
 
 if target_element == 'co'
    target = 1;
@@ -24,6 +31,7 @@ elseif target_element == 'mg'
    target = 2;
    target_data = data_mgka;
    target_element = 'MgKa';
+   %target_element = 'CrKa';
 elseif target_element == 'mn'
    target = 3;
    target_data = data_mnka;
@@ -36,6 +44,7 @@ elseif target_element == 'zn'
    target = 5;
    target_data = data_znka;
    target_element = 'ZnKa';
+   %target_element = 'FeKa';
 end
 
 % Initialize threshold
@@ -67,24 +76,21 @@ else
     
 end
 
-% Map record points to position numbers
-index = zeros(1,121);
-for i = 1:length(record)
+[record_row,record_col] = size(record);
+record_pos = zeros(1,record_col);
+for i = 1:record_col
     
-   if mod(record(i),11) == 0
-        row_index = floor(record(i)/11);
-        col_index = 11;
-   else
-        row_index = floor(record(i)/11) + 1;
-        col_index = mod(record(i),11);
-   end
-   
-   index(i) = pos_num(row_index,col_index);
-   
+    if mod(record(i),col) == 0
+        row_index = floor(record(i)/col);
+        col_index = col;
+    else
+        row_index = floor(record(i)/col) + 1;
+        col_index = mod(record(i),col);
+    end
+    
+    record_pos(i) = pos_num(row_index,col_index);
+    
 end
-
-index(length(record) + 1:121) = [];
-
 
 if get(handles.xrd_checkbox, 'value') == 1
 
@@ -93,7 +99,7 @@ if get(handles.xrd_checkbox, 'value') == 1
     % In-bound checking
     for i = 1:89
     
-        if ~ismember(i,index)
+        if ~ismember(i,record_pos)
             zz(1:row_num - 1,i) = 0;
         elseif (data_coka(i) < co_min) || (data_coka(i) > co_max)
             zz(1:row_num - 1,i) = 0;
@@ -110,37 +116,57 @@ if get(handles.xrd_checkbox, 'value') == 1
     end
 
     figure(3)
+    lgd_index = zeros(1,length(record));
+    lgd_cnt = 1;
     for i = 1:89
 
         if sum(zz(1:row_num - 1,i)) ~= 0
+            
             y_vec = zeros(row_num - 1,1);
             y_vec(1:row_num - 1) = target_data(i);
-            plot3(number_xrd(2:row_num,1),y_vec,zz(1:row_num - 1,i));
+            plt = plot3(number_xrd(2:row_num,1),y_vec,zz(1:row_num - 1,i),'LineWidth',1.2);
+            g = get(plt,'Parent');
+            set(g,'LineWidth',1.5,'FontSize',14);
+                        
+            lgd_index(lgd_cnt) = i;
+            lgd_cnt = lgd_cnt + 1;
+            
             hold on;
+            
         end
 
     end
+    
+    lgd_index(lgd_cnt:record_col) = [];
 
     hold off;
     xlabel('2-theta(degree)') 
-    ylabel(['PR-15 ' target_element])
+    ylabel(['RS-7 ' target_element])
+    
     angle_min = str2double(get(handles.angle_min,'String'));
     angle_max = str2double(get(handles.angle_max,'String'));
     xlim([angle_min,angle_max])
+    
+    lgd = num2str(sort(lgd_index(1:length(lgd_index)))','point %d');
+    legend(lgd)
 
 end
 
 if get(handles.res_checkbox, 'value') == 1
     
-    yy = zeros(121,2);
+    yy = zeros(length(data_imp),2);
+    yy(:,1) = target_data;
     yy(:,2) = data_imp;
     
     % In-bound checking
     xmax = 0;
     xmin = 100;
-    for i = 1:121
+    length(data_imp)
+    for i = 1:length(data_imp)
+        i
+        target_data(i)
+        data_imp(i)
         
-        yy(i,1) = target_data(i);
         if ~ismember(i,record)
             yy(i,2) = 0;
         elseif (data_coka(i) < co_min) || (data_coka(i) > co_max)
@@ -169,19 +195,31 @@ if get(handles.res_checkbox, 'value') == 1
         
     end
     
-    figure(4)
-    yy = sortrows(yy,1);
-    plot(yy(:,1),yy(:,2),'-o')
-    xlabel(['PR-15 ' target_element])
-    ylabel('Resistance')
-    ylim([0,(max(yy(:,2))*4)/3])
-    
     figure(5)
-    plot(yy(:,1),yy(:,2),'-o')
-    xlabel(['PR-15 ' target_element])
+    yy = sortrows(yy,1);
+    plt = plot(yy(:,1),yy(:,2),'-o','LineWidth',1.2);
+    g = get(plt,'Parent');
+    set(g,'LineWidth',1.5,'FontSize',14);
+    xlabel(['RS-7 ' target_element])
     ylabel('Resistance')
-    xlim([xmin,xmax])
-    ylim([0,(max(yy(:,2))*4)/3])
+    if max(yy(:,2)) > 0
+        ylim([0,(max(yy(:,2))*4)/3])
+    end
+    
+    figure(6)
+    plt = plot(yy(:,1),yy(:,2),'-o','LineWidth',1.2);
+    g = get(plt,'Parent');
+    set(g,'LineWidth',1.5,'FontSize',14);
+    xlabel(['RS-7 ' target_element])
+    ylabel('Resistance')
+    
+    if length(record) > 1
+        xlim([xmin,xmax])
+    end
+    
+    if max(yy(:,2)) > 0
+        ylim([0,(max(yy(:,2))*4)/3])
+    end
     
 end
 

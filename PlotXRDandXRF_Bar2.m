@@ -3,6 +3,13 @@ function PlotXRDandXRF_Bar2(handles,index,len)
     global number_xrd
     global row_num;
     global pos_num;
+    global mode;
+    
+    if mode == 1
+        col = 10;
+    elseif mode == 2
+        col = 11;
+    end
     
     global data_coka;
     global data_mgka;
@@ -10,7 +17,7 @@ function PlotXRDandXRF_Bar2(handles,index,len)
     global data_nika;
     global data_znka;
 
-
+    %bar_data = zeros(len,3);
     bar_data = zeros(len,5);
     lgd_index = zeros(1,len);
 
@@ -18,12 +25,12 @@ function PlotXRDandXRF_Bar2(handles,index,len)
     subplot(1,2,1)
     for i = 1:len
         
-        if mod(index(i),11) == 0
-            row_index = floor(index(i)/11);
-            col_index = 11;
+        if mod(index(i),col) == 0
+            row_index = floor(index(i)/col);
+            col_index = col;
         else
-            row_index = floor(index(i)/11) + 1;
-            col_index = mod(index(i),11);
+            row_index = floor(index(i)/col) + 1;
+            col_index = mod(index(i),col);
         end
         
         x = pos_num(row_index,col_index);
@@ -35,10 +42,16 @@ function PlotXRDandXRF_Bar2(handles,index,len)
         hold on;
     
         bar_data(i,:) = [data_coka(index(i)),data_mgka(index(i)),data_mnka(index(i)),data_nika(index(i)),data_znka(index(i))];
+        %bar_data(i,:) = [data_coka(index(i)),data_nika(index(i)),data_znka(index(i))];
 
     end
 
-    axis([0, 100, -inf, inf]);
+    if length(lgd_index) > 1
+        axis([min(lgd_index), max(lgd_index), -inf, inf]);
+    else
+        axis([0,105, -inf, inf]);
+    end
+    
     lgd = num2str(sort(lgd_index(1:len))','point %d');
     legend(lgd)
     xlabel('point number') 
@@ -72,6 +85,6 @@ function PlotXRDandXRF_Bar2(handles,index,len)
     end
     
     colorbar
-    set(gcf,'unit','normalized','position',[0.2,0.2,0.64,0.5]);
+    set(gcf,'unit','normalized','position',[0.2,0.2,0.9,0.65]);
 
 end

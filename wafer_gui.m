@@ -22,7 +22,7 @@ function varargout = wafer_gui(varargin)
 
 % Edit the above text to modify the response to help wafer_gui
 
-% Last Modified by GUIDE v2.5 19-Sep-2019 14:39:24
+% Last Modified by GUIDE v2.5 14-Oct-2019 22:01:59
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -53,13 +53,33 @@ function wafer_gui_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to wafer_gui (see VARARGIN)
 
-% Read XRD and XRF data
-ReadPos('../data_Xuyen/rs11_XRD_map.xlsx','RS11-Position')
+
+% Read Input Date
+global mode; % mode = 1: 10*10, mode = 2: 11*11
+
+% For rs7
+%mode = 1;
+%ReadPos('../data_Tina/xrd_rs007_point_position.xlsx','Sheet1','A2:C101',8.1,37.4,7.8,37.5);
+%ReadXRD('../data_Tina/xrd/RS7L.xlsm','RS7L');
+%ReadIMP('../data_Tina/4_point/RS7.xlsx','Sheet1');
+%ReadXRF;
+
+% For rs11
+mode = 2;
+ReadPos2('../data_Xuyen/rs11_XRD_map.xlsx','RS11-Position','A2:C90',6.333,31.667,6.333,31.667)
 ReadXRD('../data_Xuyen/NIST_xrd_data_converted_to_2_theta/RS11_xrd (converted).xlsx','Sheet1');
+ReadIMP2('../data_Xuyen/4_point/RS11_20190509083509.xlsm','RS11_20190509083509');
 ReadXRF2;
+
+% For sp7
+%mode = 2;
+%ReadPos2('../data_Xuyen/sp7_XRD_map.xlsx','Sheet1','A2:C90',6.333,31.667,6.333,31.667);
+%ReadXRD('../data_Xuyen/NIST_xrd_data_converted_to_2_theta/Sp7_xrd (converted).xlsx','Sheet1');
+%ReadIMP2('../data_Xuyen/4_point/SP07_20190409213225.xlsm','SP07_20190409213225');
+%ReadXRF2;
+
 %ReadXRD('../XRD/RS5H.xlsm','RS5H');
 %ReadXRF;
-ReadIMP('../data_Xuyen/4_point/RS11_20190509083509','RS11_20190509083509');
 
 axes1_CreateFcn;
 
@@ -71,29 +91,55 @@ set(bg,'AlphaData',alpha)
 % Generate checkboxes
 global pos_num;
 global cbx;
-cbx = zeros(1,121);
-y_pos = 40;
-for i = 1:11
-    x_pos = 20;
-    for j = 1:11
-        cbx((i - 1)*11 + j) = uicontrol('Style','checkbox',...
+if mode == 1
+    
+    cbx = zeros(1,100);
+    y_pos = 40;
+    for i = 1:10
+        x_pos = 20;
+        for j = 1:10
+            cbx((i - 1)*10 + j) = uicontrol('Style','checkbox',...
+                                        'String',num2str(pos_num(i,j)),...
+                                        'tag',['Checkbox',num2str((i - 1)*10 + j)],...
+                                        'value',0,...
+                                        'Position',[x_pos,y_pos,35,15]);
+            set(cbx((i - 1)*10 + j),'BackgroundColor','c')
+            x_pos = x_pos + 50;
+        end
+        y_pos = y_pos + 45;
+    end
+    
+elseif mode == 2
+    
+    cbx = zeros(1,121);
+    y_pos = 40;
+    for i = 1:11
+        x_pos = 20;
+        for j = 1:11
+            cbx((i - 1)*11 + j) = uicontrol('Style','checkbox',...
                                         'String',num2str(pos_num(i,j)),...
                                         'tag',['Checkbox',num2str((i - 1)*11 + j)],...
                                         'value',0,...
                                         'Position',[x_pos,y_pos,30,15]);
-        set(cbx((i - 1)*11 + j),'BackgroundColor','c')
-        x_pos = x_pos + 45;
+            set(cbx((i - 1)*11 + j),'BackgroundColor','c')
+            x_pos = x_pos + 45;
+        end
+        y_pos = y_pos + 40;
     end
-    y_pos = y_pos + 40;
+    
 end
 
 % Hide checkboxes out of bound
-HideCheckboxOutbound;
-%global outbounds;
-%outbounds = [1,2,3,8,9,10,11,12,19,20,21,30,40,70,71,80,81,82,89,90,91,92,93,98,99,100];
-%for i = 1:length(outbounds)
-%   set(cbx(outbounds(i)),'Visible','off'); 
-%end
+global outbounds;
+if mode == 1
+    outbounds = [1,2,3,8,9,10,11,12,19,20,21,30,40,61,70,71,80,81,82,89,90,91,92,93,98,99,100];
+    for i = 1:length(outbounds)
+        set(cbx(outbounds(i)),'Visible','off'); 
+    end
+elseif mode == 2
+    outbounds = -1;
+    HideCheckboxOutbound;
+end
 
 set(handles.sortPanel,'Visible','off');
 set(handles.thresholdPanel2,'Visible','off');
@@ -151,7 +197,8 @@ end
 function HideWaferPage(handles)
   
 global cbx;
-for i = 1:121
+[row,col] = size(cbx);
+for i = 1:col
     set(cbx(i), 'Visible','off');
 end
 
@@ -173,10 +220,12 @@ set(handles.wafer_img,'ytick',[]);
 
 global cbx;
 global pos_num;
-for i = 1:11
-    for j = 1:11
-        if pos_num(i,j) > 0
-            set(cbx((i - 1)*11 + j),'Visible','on'); 
+global outbounds;
+[row,col] = size(cbx);
+for i = 1:sqrt(col)
+    for j = 1:sqrt(col)
+        if pos_num(i,j) > 0 && ~ismember((i - 1)*sqrt(col) + j,outbounds)
+            set(cbx((i - 1)*sqrt(col) + j),'Visible','on'); 
         end
     end
 end
@@ -218,10 +267,11 @@ global point_num;
 global record;
 global cbx;
 
+[row,col] = size(cbx);
 point_num = 0;
-record = zeros(1,121);
+record = zeros(1,col);
 
-for i = 1:121
+for i = 1:col
     value = get(cbx(i), 'value');
     if value == 1
         point_num = point_num + 1;
@@ -234,7 +284,7 @@ if point_num == 0
     return
 end
 
-record(point_num + 1:121) = [];
+record(point_num + 1:col) = [];
 xrd_value = get(handles.xrd_checkbox, 'value');
 xrf_value = get(handles.xrf_checkbox, 'value');
 res_value = get(handles.res_checkbox, 'value');
@@ -245,6 +295,8 @@ if xrd_value == 1
         HideWaferPage(handles);
         set(handles.thresholdPanel,'Visible','on');
         set(handles.thresholdPanel2,'Visible','on');
+    elseif res_value == 1
+        PlotXRDandRes(handles,record,point_num);
     else
         PlotXRD(handles,record,point_num);
     end
@@ -256,7 +308,7 @@ if res_value == 1
        HideWaferPage(handles);
        set(handles.thresholdPanel,'Visible','on');
        set(handles.thresholdPanel2,'Visible','on');
-   else
+   elseif xrd_value == 0
        PlotRes(record,point_num);
    end
 end
@@ -272,11 +324,13 @@ function all_btn_Callback(hObject, eventdata, handles)
 
 global cbx;
 global pos_num;
+global outbounds;
+[row,col] = size(cbx);
 
-for i = 1:11
-    for j = 1:11
-        if pos_num(i,j) > 0
-            set(cbx((i - 1)*11 + j),'Value',1); 
+for i = 1:sqrt(col)
+    for j = 1:sqrt(col)
+        if pos_num(i,j) > 0 && (~ismember((i - 1)*sqrt(col) + j,outbounds))
+            set(cbx((i - 1)*sqrt(col) + j),'Value',1); 
         end
     end
 end
@@ -292,10 +346,11 @@ function clear_btn_Callback(hObject, eventdata, handles)
 global cbx;
 global pos_num;
 
-for i = 1:11
-    for j = 1:11
+[row,col] = size(cbx);
+for i = 1:sqrt(col)
+    for j = 1:sqrt(col)
         if pos_num(i,j) > 0
-            set(cbx((i - 1)*11 + j),'Value',0); 
+            set(cbx((i - 1)*sqrt(col) + j),'Value',0); 
         end
     end
 end
@@ -715,20 +770,30 @@ global pos_num;
 global data_imp;
 global cbx;
 
-[sorted,index] = sort(data_imp,'descend');
+if get(handles.reverse_checkbox, 'value') == 0
+    [sorted,index] = sort(data_imp,'descend');
+else
+    [sorted,index] = sort(data_imp);
+end
+
 points_num = str2double(get(handles.sort_num,'String'));
 
 index_cnt = 1;
 sorted_cnt = 0;
 
-while (sorted_cnt < points_num) && (index_cnt <= 121)
+while (sorted_cnt < points_num) && (index_cnt <= length(cbx))
     
-    if mod(index(index_cnt),11) == 0
-        row_index = floor(index(index_cnt)/11);
-        col_index = 11;
+    if data_imp(index(index_cnt)) <= 0
+        index_cnt = index_cnt + 1;
+        continue;
+    end
+    
+    if mod(index(index_cnt),sqrt(length(cbx))) == 0
+        row_index = floor(index(index_cnt)/sqrt(length(cbx)));
+        col_index = sqrt(length(cbx));
     else
-        row_index = floor(index(index_cnt)/11) + 1;
-        col_index = mod(index(index_cnt),11);
+        row_index = floor(index(index_cnt)/sqrt(length(cbx))) + 1;
+        col_index = mod(index(index_cnt),sqrt(length(cbx)));
     end
     
     % Check if the corresponding checkbox out of bound
@@ -736,6 +801,7 @@ while (sorted_cnt < points_num) && (index_cnt <= 121)
         set(cbx(index(index_cnt)),'Value',1);
         sorted_cnt = sorted_cnt + 1;
     end
+    
     index_cnt = index_cnt + 1;
     
 end
@@ -755,7 +821,12 @@ global pos_num;
 global data_znka;
 global cbx;
 
-[sorted,index] = sort(data_znka,'descend');
+if get(handles.reverse_checkbox, 'value') == 0
+    [sorted,index] = sort(data_znka,'descend');
+else
+    [sorted,index] = sort(data_znka);
+end
+
 points_num = str2double(get(handles.sort_num,'String'));
 
 index_cnt = 1;
@@ -794,7 +865,12 @@ global pos_num;
 global data_mnka;
 global cbx;
 
-[sorted,index] = sort(data_mnka,'descend');
+if get(handles.reverse_checkbox, 'value') == 0
+    [sorted,index] = sort(data_mnka,'descend');
+else
+    [sorted,index] = sort(data_mnka);
+end
+
 points_num = str2double(get(handles.sort_num,'String'));
 
 index_cnt = 1;
@@ -833,7 +909,12 @@ global pos_num;
 global data_nika;
 global cbx;
 
-[sorted,index] = sort(data_nika,'descend');
+if get(handles.reverse_checkbox, 'value') == 0
+    [sorted,index] = sort(data_nika,'descend');
+else
+    [sorted,index] = sort(data_nika);
+end
+
 points_num = str2double(get(handles.sort_num,'String'));
 
 index_cnt = 1;
@@ -872,7 +953,12 @@ global pos_num;
 global data_mgka;
 global cbx;
 
-[sorted,index] = sort(data_mgka,'descend');
+if get(handles.reverse_checkbox, 'value') == 0
+    [sorted,index] = sort(data_mgka,'descend');
+else
+    [sorted,index] = sort(data_mgka);
+end
+
 points_num = str2double(get(handles.sort_num,'String'));
 
 index_cnt = 1;
@@ -911,7 +997,12 @@ global pos_num;
 global data_coka;
 global cbx;
 
-[sorted,index] = sort(data_coka,'descend');
+if get(handles.reverse_checkbox, 'value') == 0
+    [sorted,index] = sort(data_coka,'descend');
+else
+    [sorted,index] = sort(data_coka);
+end
+
 points_num = str2double(get(handles.sort_num,'String'));
 
 index_cnt = 1;
@@ -1776,4 +1867,14 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+end
+
+
+% --- Executes on button press in reverse_checkbox.
+function reverse_checkbox_Callback(hObject, eventdata, handles)
+% hObject    handle to reverse_checkbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of reverse_checkbox
 end
