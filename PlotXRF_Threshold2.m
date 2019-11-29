@@ -118,24 +118,32 @@ if get(handles.xrd_checkbox, 'value') == 1
     figure(3)
     lgd_index = zeros(1,length(record));
     lgd_cnt = 1;
-    for i = 1:89
-
-        if sum(zz(1:row_num - 1,i)) ~= 0
+    
+    for i = 1:col
+       for j = 1:col
             
-            y_vec = zeros(row_num - 1,1);
-            y_vec(1:row_num - 1) = target_data(i);
-            plt = plot3(number_xrd(2:row_num,1),y_vec,zz(1:row_num - 1,i),'LineWidth',1.2);
-            g = get(plt,'Parent');
-            set(g,'LineWidth',1.5,'FontSize',14);
+           if pos_num(i,j) == 0
+               continue
+           end
+            
+           if sum(zz(1:row_num - 1,pos_num(i,j))) ~= 0
+                
+                y_vec = zeros(row_num - 1,1);
+                y_vec(1:row_num - 1) = target_data((i - 1)*col + j);
+                plt = plot3(number_xrd(2:row_num,1),y_vec,zz(1:row_num - 1,pos_num(i,j)),'LineWidth',1.2);
+                g = get(plt,'Parent');
+                set(g,'LineWidth',1.5,'FontSize',14);
                         
-            lgd_index(lgd_cnt) = i;
-            lgd_cnt = lgd_cnt + 1;
+                lgd_index(lgd_cnt) = pos_num(i,j);
+                lgd_cnt = lgd_cnt + 1;
             
-            hold on;
+                hold on;
+                
+            end
             
         end
-
     end
+    
     
     lgd_index(lgd_cnt:record_col) = [];
 
@@ -154,6 +162,7 @@ end
 
 if get(handles.res_checkbox, 'value') == 1
     
+    length(data_imp)
     yy = zeros(length(data_imp),2);
     yy(:,1) = target_data;
     yy(:,2) = data_imp;
@@ -163,9 +172,6 @@ if get(handles.res_checkbox, 'value') == 1
     xmin = 100;
     length(data_imp)
     for i = 1:length(data_imp)
-        i
-        target_data(i)
-        data_imp(i)
         
         if ~ismember(i,record)
             yy(i,2) = 0;
