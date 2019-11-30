@@ -3,7 +3,7 @@ function PlotBKGD_XRF()
     global number_bkgd;
     global data_mnka;
     global data_znka;
-    global pos_num;
+    global pos_num_bkgd;
     
     figure(1)
     for row = 1:15
