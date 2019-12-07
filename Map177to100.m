@@ -7,6 +7,7 @@ global position;
 global position_bkgd;
 global number_bkgd;
 global mapped_bkgd;
+global mapping_pos;
 
 if mode == 1
     n = 10;
@@ -15,6 +16,7 @@ elseif mode == 2
 end
 
 mapped_bkgd = zeros(n*n,800);
+mapping_pos = zeros(15,15);
 row_offset = [0 1 0 1];
 col_offset = [0 0 1 1];
 
@@ -57,6 +59,7 @@ for i = 1:n
                 if dis < dis_min
                     dis_min = dis;
                     mapped_bkgd(pos_num(i,j),:) = number_bkgd(:,pos_num_bkgd(row_index,col_index) + 1);
+                    mapping_pos(row_index,col_index) = pos_num(i,j);
                 end
             
             end

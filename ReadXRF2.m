@@ -30,6 +30,19 @@ function ReadXRF2
     [number_nika, text_nika, rawData_nika] = xlsread(NiKafile,'RS-11_NiKa','A1:BY225');
     [number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'RS-11_ZnKa','A1:BY225');
     
+    % For rs12 
+%     CoKafile = '../data_Xuyen/rs12_XRF/RS-12_CoKa.xlsm';
+%     MgKafile = '../data_Xuyen/rs12_XRF/RS-12_MgKa.xlsm';
+%     MnKafile = '../data_Xuyen/rs12_XRF/RS-12_MnKa.xlsm';
+%     NiKafile = '../data_Xuyen/rs12_XRF/RS-12_NiKa.xlsm';
+%     ZnKafile = '../data_Xuyen/rs12_XRF/RS-12_ZnKa.xlsm';
+%     
+%     [number_coka, text_coka, rawData_coka] = xlsread(CoKafile,'RS-12_CoKa','A1:BY225');
+%     [number_mgka, text_mgka, rawData_mgka] = xlsread(MgKafile,'RS-12_MgKa','A1:BY225');
+%     [number_mnka, text_mnka, rawData_mnka] = xlsread(MnKafile,'RS-12_MnKa','A1:BY225');
+%     [number_nika, text_nika, rawData_nika] = xlsread(NiKafile,'RS-12_NiKa','A1:BY225');
+%     [number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'RS-12_ZnKa','A1:BY225');
+    
     % For sp7
     %CoKafile = '../data_Xuyen/sp7_XRF/SP-7_CoKa.xlsm';
     %MgKafile = '../data_Xuyen/sp7_XRF/SP-7_CrKa.xlsm';
@@ -147,5 +160,7 @@ function ReadXRF2
         col_cnt_p = 2;
     
     end
+    
+    ShowXRFData(data_coka)
     
 end

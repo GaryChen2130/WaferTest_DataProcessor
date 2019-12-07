@@ -9,7 +9,10 @@ function ReadIMP2(file_path,sheet_name)
  
     %% Map IMP points to XRD points (XRD: 7.9mm, 8.1mm)
     global data_imp;
+    global data_imp2;
+    global pos_num;
     data_imp = zeros(1,121);
+    data_imp2 = zeros(121,1);
     for i = 1:length(number)
         
         % Covert polar coordinates into Cartesian coordinates
@@ -24,6 +27,12 @@ function ReadIMP2(file_path,sheet_name)
         step_x = round(y/7) + 1;
         step_y = round(x/7) + 1;
         data_imp((step_x - 1)*11 + step_y) = val_imp(i);
+        
+        if pos_num(step_x,step_y) == 0
+            continue;
+        end
+        
+        data_imp2(pos_num(step_x,step_y)) = val_imp(i);
         
     end
     
