@@ -18,17 +18,17 @@ function ReadXRF2
     %[number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'RS-7_ZnKa','A1:BY225');
     
     % For rs11   
-    CoKafile = '../data_Xuyen/rs11_XRF/RS-11_CoKa.xlsm';
-    MgKafile = '../data_Xuyen/rs11_XRF/RS-11_MgKa.xlsm';
-    MnKafile = '../data_Xuyen/rs11_XRF/RS-11_MnKa.xlsm';
-    NiKafile = '../data_Xuyen/rs11_XRF/RS-11_NiKa.xlsm';
-    ZnKafile = '../data_Xuyen/rs11_XRF/RS-11_ZnKa.xlsm';
-    
-    [number_coka, text_coka, rawData_coka] = xlsread(CoKafile,'RS-11_CoKa','A1:BY225');
-    [number_mgka, text_mgka, rawData_mgka] = xlsread(MgKafile,'RS-11_MgKa','A1:BY225');
-    [number_mnka, text_mnka, rawData_mnka] = xlsread(MnKafile,'RS-11_MnKa','A1:BY225');
-    [number_nika, text_nika, rawData_nika] = xlsread(NiKafile,'RS-11_NiKa','A1:BY225');
-    [number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'RS-11_ZnKa','A1:BY225');
+%     CoKafile = '../data_Xuyen/rs11_XRF/RS-11_CoKa.xlsm';
+%     MgKafile = '../data_Xuyen/rs11_XRF/RS-11_MgKa.xlsm';
+%     MnKafile = '../data_Xuyen/rs11_XRF/RS-11_MnKa.xlsm';
+%     NiKafile = '../data_Xuyen/rs11_XRF/RS-11_NiKa.xlsm';
+%     ZnKafile = '../data_Xuyen/rs11_XRF/RS-11_ZnKa.xlsm';
+%     
+%     [number_coka, text_coka, rawData_coka] = xlsread(CoKafile,'RS-11_CoKa','A1:BY225');
+%     [number_mgka, text_mgka, rawData_mgka] = xlsread(MgKafile,'RS-11_MgKa','A1:BY225');
+%     [number_mnka, text_mnka, rawData_mnka] = xlsread(MnKafile,'RS-11_MnKa','A1:BY225');
+%     [number_nika, text_nika, rawData_nika] = xlsread(NiKafile,'RS-11_NiKa','A1:BY225');
+%     [number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'RS-11_ZnKa','A1:BY225');
     
     % For rs12 
 %     CoKafile = '../data_Xuyen/rs12_XRF/RS-12_CoKa.xlsm';
@@ -44,17 +44,17 @@ function ReadXRF2
 %     [number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'RS-12_ZnKa','A1:BY225');
     
     % For sp7
-    %CoKafile = '../data_Xuyen/sp7_XRF/SP-7_CoKa.xlsm';
-    %MgKafile = '../data_Xuyen/sp7_XRF/SP-7_CrKa.xlsm';
-    %MnKafile = '../data_Xuyen/sp7_XRF/SP-7_MnKa.xlsm';
-    %NiKafile = '../data_Xuyen/sp7_XRF/SP-7_NiKa.xlsm';
-    %ZnKafile = '../data_Xuyen/sp7_XRF/SP-7_FeKa.xlsm';
+    CoKafile = '../data_Xuyen/sp7_XRF/SP-7_CoKa.xlsm';
+    MgKafile = '../data_Xuyen/sp7_XRF/SP-7_CrKa.xlsm';
+    MnKafile = '../data_Xuyen/sp7_XRF/SP-7_MnKa.xlsm';
+    NiKafile = '../data_Xuyen/sp7_XRF/SP-7_NiKa.xlsm';
+    ZnKafile = '../data_Xuyen/sp7_XRF/SP-7_FeKa.xlsm';
     
-    %[number_coka, text_coka, rawData_coka] = xlsread(CoKafile,'SP-7_CoKa','A1:BY225');
-    %[number_mgka, text_mgka, rawData_mgka] = xlsread(MgKafile,'SP-7_CrKa','A1:BY225');
-    %[number_mnka, text_mnka, rawData_mnka] = xlsread(MnKafile,'SP-7_MnKa','A1:BY225');
-    %[number_nika, text_nika, rawData_nika] = xlsread(NiKafile,'SP-7_NiKa','A1:BY225');
-    %[number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'SP-7_FeKa','A1:BY225');
+    [number_coka, text_coka, rawData_coka] = xlsread(CoKafile,'SP-7_CoKa','A1:BY225');
+    [number_mgka, text_mgka, rawData_mgka] = xlsread(MgKafile,'SP-7_CrKa','A1:BY225');
+    [number_mnka, text_mnka, rawData_mnka] = xlsread(MnKafile,'SP-7_MnKa','A1:BY225');
+    [number_nika, text_nika, rawData_nika] = xlsread(NiKafile,'SP-7_NiKa','A1:BY225');
+    [number_znka, text_znka, rawData_znka] = xlsread(ZnKafile,'SP-7_FeKa','A1:BY225');
     
         %% Map XRF points to XRD points  (1mm, 1mm)/ (6.33mm, 6.33mm) 
     row_index = 152;
@@ -161,6 +161,16 @@ function ReadXRF2
     
     end
     
-    ShowXRFData(data_coka)
+    for i = 1:5
+        for j = 1:11
+            data_coka(:,[(i - 1)*11 + j,(11 - i)*11 + j]) = data_coka(:,[(11 - i)*11 + j,(i - 1)*11 + j]);
+            data_mgka(:,[(i - 1)*11 + j,(11 - i)*11 + j]) = data_mgka(:,[(11 - i)*11 + j,(i - 1)*11 + j]);
+            data_mnka(:,[(i - 1)*11 + j,(11 - i)*11 + j]) = data_mnka(:,[(11 - i)*11 + j,(i - 1)*11 + j]);
+            data_nika(:,[(i - 1)*11 + j,(11 - i)*11 + j]) = data_nika(:,[(11 - i)*11 + j,(i - 1)*11 + j]);
+            data_znka(:,[(i - 1)*11 + j,(11 - i)*11 + j]) = data_znka(:,[(11 - i)*11 + j,(i - 1)*11 + j]);
+        end
+    end
+    
+    ShowXRFData(data_znka)
     
 end
