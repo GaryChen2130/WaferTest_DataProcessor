@@ -15,6 +15,6 @@ function ShowXRFData(xrf_data)
         end
     end
     
-    print_data
+    %print_data
 
 end
